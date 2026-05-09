@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Canım Annem</title>
+    <style>
+        body { background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; flex-direction: column; overflow: hidden; }
+        .heart { position: relative; width: 100px; height: 100px; background-color: #ff4d6d; transform: rotate(-45deg); animation: beat 0.8s infinite alternate; box-shadow: 0 0 40px #ff4d6d; }
+        .heart:before, .heart:after { content: ""; position: absolute; width: 100px; height: 100px; background-color: #ff4d6d; border-radius: 50%; }
+        .heart:before { top: -50px; left: 0; }
+        .heart:after { left: 50px; top: 0; }
+        @keyframes beat { from { transform: scale(1) rotate(-45deg); } to { transform: scale(1.2) rotate(-45deg); } }
+        .message { color: white; font-family: sans-serif; margin-top: 100px; text-align: center; font-size: 24px; text-shadow: 0 0 10px #ff4d6d; }
+    </style>
+</head>
+<body>
+    <div class="heart"></div>
+    <div class="message">Anneler Günün Kutlu Olsun Canım Annem! 💖</div>
+</body>
+</html>
