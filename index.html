@@ -4,17 +4,43 @@
     <meta charset="UTF-8">
     <title>Canım Annem</title>
     <style>
-        body { background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; flex-direction: column; overflow: hidden; }
-        .heart { position: relative; width: 100px; height: 100px; background-color: #ff4d6d; transform: rotate(-45deg); animation: beat 0.8s infinite alternate; box-shadow: 0 0 40px #ff4d6d; }
-        .heart:before, .heart:after { content: ""; position: absolute; width: 100px; height: 100px; background-color: #ff4d6d; border-radius: 50%; }
-        .heart:before { top: -50px; left: 0; }
-        .heart:after { left: 50px; top: 0; }
-        @keyframes beat { from { transform: scale(1) rotate(-45deg); } to { transform: scale(1.2) rotate(-45deg); } }
-        .message { color: white; font-family: sans-serif; margin-top: 100px; text-align: center; font-size: 24px; text-shadow: 0 0 10px #ff4d6d; }
+        body { margin: 0; background: black; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        #heart-container { position: relative; width: 300px; height: 300px; }
+        .love-text { position: absolute; color: #ff4d6d; font-size: 11px; font-family: Arial, sans-serif; white-space: nowrap; text-shadow: 0 0 5px #ff4d6d; }
+        .message { position: absolute; bottom: 10%; color: white; font-family: sans-serif; font-size: 1.5rem; text-align: center; width: 100%; text-shadow: 0 0 10px #ff4d6d; }
     </style>
 </head>
 <body>
-    <div class="heart"></div>
+    <div id="heart-container"></div>
     <div class="message">Anneler Günün Kutlu Olsun Canım Annem! 💖</div>
+
+    <script>
+        const container = document.getElementById('heart-container');
+        const words = "I LOVE YOU ";
+        const count = 100;
+
+        for (let i = 0; i < count; i++) {
+            const span = document.createElement('span');
+            span.className = 'love-text';
+            span.innerText = words;
+            container.appendChild(span);
+
+            const t = (i / count) * 2 * Math.PI;
+            const x = 16 * Math.pow(Math.sin(t), 3);
+            const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+
+            span.style.left = `${150 + x * 10}px`;
+            span.style.top = `${150 + y * 10}px`;
+
+            span.animate([
+                { transform: `rotate(${t}rad) translateX(0px)` },
+                { transform: `rotate(${t + 2 * Math.PI}rad) translateX(15px)` }
+            ], {
+                duration: 3000,
+                iterations: Infinity,
+                delay: i * 30
+            });
+        }
+    </script>
 </body>
 </html>
