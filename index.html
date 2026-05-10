@@ -4,56 +4,102 @@
     <meta charset="UTF-8">
     <title>Canım Annem</title>
     <style>
-        body { margin: 0; background: black; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; }
-        #heart-container { position: relative; width: 300px; height: 300px; }
-        .love-text { position: absolute; color: #ff4d6d; font-size: 11px; white-space: nowrap; text-shadow: 0 0 5px #ff4d6d; }
-        .flower { position: absolute; font-size: 25px; animation: float 6s linear infinite; opacity: 0; }
-        .message { position: absolute; bottom: 8%; color: white; text-align: center; width: 100%; text-shadow: 0 0 10px #ff4d6d; z-index: 10; font-size: 22px; }
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        body { margin: 0; background: #050505; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        /* Kalp Konteynırı */
+        #heart-container { position: relative; width: 300px; height: 300px; z-index: 10; }
+        .love-text { position: absolute; color: #ff4d6d; font-size: 11px; white-space: nowrap; text-shadow: 0 0 8px #ff4d6d; pointer-events: none; }
+
+        /* Videodaki Büyüyen Çiçekler */
+        .growing-flower {
+            position: absolute;
+            bottom: -50px;
+            transform-origin: bottom center;
+            animation: grow 4s ease-out forwards;
+            z-index: 5;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
         }
+
+        @keyframes grow {
+            0% { transform: scale(0) translateY(0); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: scale(1.5) translateY(-80vh); opacity: 0; }
+        }
+
+        .message {
+            position: absolute;
+            bottom: 10%;
+            color: white;
+            text-align: center;
+            width: 100%;
+            text-shadow: 0 0 15px #ff4d6d;
+            z-index: 20;
+            font-size: 26px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        /* Arka plan yıldızları */
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: twinkle 2s infinite alternate;
+        }
+        @keyframes twinkle { from { opacity: 0.2; } to { opacity: 1; } }
     </style>
 </head>
 <body>
     <div id="heart-container"></div>
-    <div id="flower-field"></div>
-    <div class="message">Dünyanın En Güzel Annesine... 🌸💖</div>
+    <div id="garden"></div>
+    <div class="message">Anneler Günün Kutlu Olsun Canım Annem! 🌸✨</div>
 
     <script>
         const container = document.getElementById('heart-container');
-        const flowerField = document.getElementById('flower-field');
+        const garden = document.getElementById('garden');
         const words = "I LOVE YOU ";
-        const flowers = ["🌸", "🌹", "🌷", "🌺", "🌻", "🌼"];
 
-        // Dönen Yazılı Kalp
-        for (let i = 0; i < 100; i++) {
+        // 1. Dönen Yazılı Kalp (Videodaki gibi)
+        for (let i = 0; i < 120; i++) {
             const span = document.createElement('span');
             span.className = 'love-text';
             span.innerText = words;
             container.appendChild(span);
-            const t = (i / 100) * 2 * Math.PI;
+            const t = (i / 120) * 2 * Math.PI;
             const x = 16 * Math.pow(Math.sin(t), 3);
             const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
             span.style.left = `${150 + x * 10}px`;
             span.style.top = `${150 + y * 10}px`;
             span.animate([
-                { transform: `rotate(${t}rad) translateX(0px)` },
-                { transform: `rotate(${t + 2 * Math.PI}rad) translateX(15px)` }
-            ], { duration: 3000, iterations: Infinity, delay: i * 30 });
+                { transform: `rotate(${t}rad) translateX(0px) scale(1)` },
+                { transform: `rotate(${t + 2 * Math.PI}rad) translateX(20px) scale(1.2)` }
+            ], { duration: 4000, iterations: Infinity, delay: i * 30 });
         }
 
-        // Uçuşan Çiçekler
-        function createFlower() {
-            const f = document.createElement('div');
-            f.className = 'flower';
-            f.innerText = flowers[Math.floor(Math.random() * flowers.length)];
-            f.style.left = Math.random() * 100 + "vw";
-            f.style.animationDuration = (Math.random() * 3 + 4) + "s";
-            flowerField.appendChild(f);
-            setTimeout(() => f.remove(), 6000);
+        // 2. Videodaki Büyüyen Çiçek Etkisi
+        const flowerEmojis = ["🌸", "🌺", "🌷", "🌹", "🌻", "🌼"];
+        function plantFlower() {
+            const flower = document.createElement('div');
+            flower.className = 'growing-flower';
+            flower.innerText = flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)];
+            flower.style.left = Math.random() * 100 + "vw";
+            flower.style.fontSize = (Math.random() * 30 + 20) + "px";
+            garden.appendChild(flower);
+            setTimeout(() => flower.remove(), 4000);
         }
-        setInterval(createFlower, 300);
+        setInterval(plantFlower, 400);
+
+        // 3. Arka Plan Yıldızları
+        for (let i = 0; i < 50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = star.style.height = Math.random() * 3 + "px";
+            star.style.left = Math.random() * 100 + "vw";
+            star.style.top = Math.random() * 100 + "vh";
+            star.style.animationDelay = Math.random() * 2 + "s";
+            document.body.appendChild(star);
+        }
     </script>
 </body>
 </html>
