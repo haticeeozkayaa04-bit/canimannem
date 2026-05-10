@@ -3,112 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Annen İçin Çiçek Bahçesi</title>
+    <title>Canım Annem</title>
     <style>
-        body { margin: 0; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: 'Segoe UI', serif; -webkit-font-smoothing: antialiased; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: black; display: flex; justify-content: center; align-items: center; flex-direction: column; }
         
-        /* 1. Kalp Konteynırı (Mobil Optimize) */
-        #heart-container { position: relative; width: 250px; height: 250px; z-index: 20; filter: drop-shadow(0 0 10px #ff4d6d); }
-        .love-text { position: absolute; color: #ff4d6d; font-size: 10px; font-weight: bold; white-space: nowrap; text-shadow: 0 0 5px #ff4d6d; pointer-events: none; }
+        /* Videoyu tam ekran ve mobil uyumlu yapar */
+        .video-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        video { width: 100%; height: 100%; object-fit: cover; }
 
-        /* 2. Gerçek Büyüyen Çiçek Bahçesi */
-        #garden { position: absolute; width: 100%; height: 100%; z-index: 10; pointer-events: none; }
-        
-        .growing-flower-img {
+        /* Mesajı videonun üzerine şık bir şekilde yerleştirir */
+        .message-box {
             position: absolute;
-            bottom: -100px; /* Ekranın altından başlar - Kesin Çözüm */
-            transform-origin: bottom center;
-            opacity: 0;
-            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.8));
-            animation: videodakiGibiBuyu 9s ease-out forwards; /* Yavaş ve büyüme animasyonu */
+            bottom: 10%;
+            z-index: 2;
+            width: 90%;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
         }
 
-        /* VİDEODAKİ GİBİ BÜYÜME VE AÇILMA ANİMASYONU */
-        @keyframes videodakiGibiBuyu {
-            0% { transform: scale(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; transform: scale(1) rotate(15deg); }
-            30% { transform: scale(1.4) rotate(-15deg); opacity: 1; } /* Büyüme ve açılma efekti */
-            100% { transform: scale(1.2) rotate(0deg) translateY(-110vh); opacity: 0; } /* Yükselme ve kaybolma */
+        .message {
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ff4d6d;
+            margin: 0;
         }
-
-        /* 3. Parıltılar */
-        .sparkle { position: absolute; background: white; border-radius: 50%; animation: twinkle 3s infinite alternate; z-index: 5; }
-        @keyframes twinkle { from { opacity: 0.1; } to { opacity: 1; } }
-
-        /* Mesaj (Mobil Optimize) */
-        .message { position: absolute; bottom: 8%; color: #fff; text-align: center; width: 90%; text-shadow: 0 0 15px #ff4d6d; z-index: 30; font-size: 22px; font-weight: bold; letter-spacing: 1px; animation: textGlow 2s infinite alternate; }
-        @keyframes textGlow { from { text-shadow: 0 0 10px #ff4d6d; } to { text-shadow: 0 0 25px #ff4d6d, 0 0 10px #fff; } }
     </style>
 </head>
 <body>
-    <div id="garden"></div>
-    <div id="heart-container"></div>
-    <div class="message">Anneler Günün Kutlu Olsun Canım Annem! ✨🌸</div>
+
+    <div class="video-wrapper">
+        <video id="myVideo" autoplay loop muted playsinline>
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-beautiful-pink-flowers-blooming-in-time-lapse-41031-large.mp4" type="video/mp4">
+            Tarayıcınız video etiketini desteklemiyor.
+        </video>
+    </div>
+
+    <div class="message-box">
+        <p class="message">Anneler Günün Kutlu Olsun Canım Annem! 🌸💖</p>
+    </div>
 
     <script>
-        const container = document.getElementById('heart-container');
-        const garden = document.getElementById('garden');
-        const words = "I LOVE YOU ";
-
-        // 1. Dönen Yazılı Kalp (Hafifçe Büyüyen ve Asılı)
-        for (let i = 0; i < 110; i++) {
-            const span = document.createElement('span');
-            span.className = 'love-text';
-            span.innerText = words;
-            container.appendChild(span);
-            const t = (i / 110) * 2 * Math.PI;
-            const x = 16 * Math.pow(Math.sin(t), 3);
-            const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
-            span.style.left = `${125 + x * 8}px`; // Kalp boyutu mobile sığsın diye optimize
-            span.style.top = `${125 + y * 8}px`;
-            span.animate([
-                { transform: `rotate(${t}rad) translateX(0px) scale(1)` },
-                { transform: `rotate(${t + 2 * Math.PI}rad) translateX(20px) scale(1.2)` }
-            ], { duration: 4000, iterations: Infinity, delay: i * 30 });
-        }
-
-        // 2. VİDEODAKİ GİBİ BÜYÜYEN GERÇEK ÇİÇEKLER
-        // Çiçek resimlerinin URL'leri (Yüksek çözünürlüklü güller, papatyalar)
-        const flowerImages = [
-            "https://haticeeozkayaa04-bit.github.io/canimannem/guller.png",  // Örnek link (Kod çalışması için geçici)
-            "https://haticeeozkayaa04-bit.github.io/canimannem/papatya.png", // Örnek link (Kod çalışması için geçici)
-            "https://i.imgur.com/w1O2nS9.png", // Papatya (Gerçek Resim)
-            "https://i.imgur.com/GzL68vT.png", // Orkide (Gerçek Resim)
-            "https://i.imgur.com/6J7r2V7.png"  // Kırmızı Gül (Gerçek Resim)
-        ];
-
-        // Kodun resimlerin yüklenip yüklenmediğini kontrol etmesi için
-        function plantFlower() {
-            const flower = document.createElement('img');
-            flower.className = 'growing-flower-img';
-            flower.src = flowerImages[Math.floor(Math.random() * flowerImages.length)];
-            
-            // Ekranın altından rastgele yatay konum
-            flower.style.left = (Math.random() * 110 - 5) + "vw";
-            
-            // Başlangıç boyutu ve animasyon süresi
-            const baseSize = (Math.random() * 80 + 80) + "px"; // 80px - 160px arası
-            flower.style.width = baseSize;
-            flower.style.height = "auto";
-            flower.style.animationDuration = (Math.random() * 4 + 7) + "s"; // 7s - 11s arası yavaş büyüme
-            
-            garden.appendChild(flower);
-            setTimeout(() => flower.remove(), 11000);
-        }
-
-        // Çok Daha Fazla Çiçek: Her 350ms'de bir çiçek fırlat
-        setInterval(plantFlower, 350);
-
-        // 3. Arka Plan Parıltıları
-        for (let i = 0; i < 50; i++) {
-            const sparkle = document.createElement('div');
-            sparkle.className = 'sparkle';
-            sparkle.style.width = sparkle.style.height = (Math.random() * 3 + 1) + "px";
-            sparkle.style.left = Math.random() * 100 + "vw";
-            sparkle.style.top = Math.random() * 100 + "vh";
-            sparkle.style.animationDelay = Math.random() * 2 + "s";
-            document.body.appendChild(sparkle);
-        }
+        // Bazı telefonlarda otomatik oynatma için ek dokunuş
+        document.addEventListener('touchstart', function() {
+            document.getElementById('myVideo').play();
+        }, {once: true});
     </script>
 </body>
 </html>
