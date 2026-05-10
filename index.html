@@ -2,85 +2,98 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Canım Annem</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anneler Günü Özel</title>
     <style>
-        body { margin: 0; background: #000; overflow: hidden; height: 100vh; display: flex; justify-content: center; align-items: center; font-family: sans-serif; }
+        body { margin: 0; background: #010a1a; overflow: hidden; height: 100vh; display: flex; justify-content: center; align-items: flex-end; }
         
-        /* Kalp */
-        #heart-container { position: relative; width: 200px; height: 200px; z-index: 20; }
-        .love-text { position: absolute; color: #ff4d6d; font-size: 10px; white-space: nowrap; text-shadow: 0 0 5px #ff4d6d; }
+        /* Arka plan yıldızları */
+        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle 2s infinite; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-        /* Çiçek Buketi (Tam Ortada ve Altta) */
-        #bouquet-container { position: absolute; bottom: 0; width: 100%; display: flex; justify-content: center; align-items: flex-end; z-index: 10; pointer-events: none; }
-        .branch-flower { position: relative; display: flex; flex-direction: column; align-items: center; margin: 0 -15px; animation: growBouquet 3s ease-out forwards; transform-origin: bottom; }
-        .branch-line { width: 5px; background: linear-gradient(to top, #1a3c1a, #2d5a27); border-radius: 10px; margin-top: -5px; }
-        
-        @keyframes growBouquet {
-            0% { transform: scale(0) rotate(10deg); opacity: 0; }
-            100% { transform: scale(1) rotate(var(--r)); opacity: 1; }
+        /* Çiçek Bahçesi */
+        #garden { position: relative; width: 100%; height: 60vh; display: flex; justify-content: center; align-items: flex-end; gap: 20px; padding-bottom: 50px; }
+
+        .flower-stem {
+            position: relative;
+            width: 4px;
+            background: linear-gradient(to top, #1a3c1a, #2d5a27);
+            border-radius: 5px;
+            animation: growStem 3s ease-out forwards;
+            display: flex;
+            justify-content: center;
         }
 
-        /* Uçuşan Çiçekler (Tüm Ekranda) */
-        .float-flower { position: absolute; bottom: -50px; animation: floatUp 6s linear forwards; z-index: 15; }
-        @keyframes floatUp { 
-            0% { transform: translateY(0) scale(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            100% { transform: translateY(-110vh) scale(1.5) rotate(360deg); opacity: 0; } 
+        @keyframes growStem { from { height: 0; } to { height: var(--h); } }
+
+        .flower-head {
+            position: absolute;
+            top: -30px;
+            font-size: 40px;
+            transform: scale(0);
+            animation: bloom 1.5s 2.5s ease-out forwards;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
         }
 
-        .message { position: absolute; bottom: 5%; color: white; width: 100%; text-align: center; text-shadow: 0 0 10px #ff4d6d; font-weight: bold; z-index: 30; font-size: 1.1rem; }
+        @keyframes bloom {
+            0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+            100% { transform: scale(1.2) rotate(0); opacity: 1; }
+        }
+
+        .message {
+            position: absolute;
+            top: 20%;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 24px;
+            letter-spacing: 2px;
+            text-align: center;
+            width: 100%;
+            opacity: 0;
+            animation: fadeIn 2s 4s forwards;
+            text-shadow: 0 0 15px rgba(255,255,255,0.6);
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-    <div id="heart-container"></div>
-    <div id="bouquet-container"></div>
+    <div id="stars"></div>
+    <div class="message">Benim İçin En Özel Çiçek Sensin Annem... ✨</div>
     <div id="garden"></div>
-    <div class="message">Dünyanın En Güzel Annesine... 🌸💖</div>
 
     <script>
-        // 1. Kalp Animasyonu
-        const container = document.getElementById('heart-container');
-        for (let i = 0; i < 80; i++) {
-            const span = document.createElement('span');
-            span.className = 'love-text';
-            span.innerText = "I LOVE YOU ";
-            container.appendChild(span);
-            const t = (i / 80) * 2 * Math.PI;
-            const x = 16 * Math.pow(Math.sin(t), 3);
-            const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
-            span.style.left = `${100 + x * 6}px`;
-            span.style.top = `${100 + y * 6}px`;
-            span.animate([{transform:`rotate(${t}rad)`},{transform:`rotate(${t+6.28}rad)`}], {duration:4000, iterations:Infinity});
+        // Yıldızları oluştur
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = star.style.height = Math.random() * 3 + 'px';
+            star.style.left = Math.random() * 100 + 'vw';
+            star.style.top = Math.random() * 100 + 'vh';
+            star.style.animationDelay = Math.random() * 2 + 's';
+            starsContainer.appendChild(star);
         }
 
-        // 2. Buket Çiçekleri (Merkezi ve Görkemli)
-        const bouquet = document.getElementById('bouquet-container');
-        const flowerTypes = ["🌸", "🌹", "🌷", "🌺", "🌻", "🌼"];
-        const angles = [-20, -10, 0, 10, 20]; // Buket formu için açılar
+        // Videodaki gibi çiçekleri oluştur
+        const garden = document.getElementById('garden');
+        const flowers = ["🌸", "🌺", "🌷", "🌹", "🌻"];
+        const heights = ["180px", "220px", "150px", "250px", "190px"];
 
-        angles.forEach((angle, index) => {
-            const bf = document.createElement('div');
-            bf.className = 'branch-flower';
-            bf.style.setProperty('--r', angle + 'deg');
-            const h = 120 + (Math.random() * 40); // Rastgele boylar
-            bf.innerHTML = `
-                <div style="font-size:35px; filter: drop-shadow(0 0 10px white);">${flowerTypes[index % flowerTypes.length]}</div>
-                <div class="branch-line" style="height:${h}px"></div>
-            `;
-            bouquet.appendChild(bf);
+        flowers.forEach((f, i) => {
+            const stem = document.createElement('div');
+            stem.className = 'flower-stem';
+            stem.style.setProperty('--h', heights[i]);
+            stem.style.animationDelay = (i * 0.5) + 's';
+
+            const head = document.createElement('div');
+            head.className = 'flower-head';
+            head.innerText = f;
+            head.style.animationDelay = (2.5 + (i * 0.5)) + 's';
+
+            stem.appendChild(head);
+            garden.appendChild(stem);
         });
-
-        // 3. Uçuşan Çiçekler
-        setInterval(() => {
-            const f = document.createElement('div');
-            f.className = 'float-flower';
-            f.innerText = flowerTypes[Math.floor(Math.random() * flowerTypes.length)];
-            f.style.left = Math.random() * 100 + "vw";
-            f.style.fontSize = (Math.random() * 15 + 20) + "px";
-            document.getElementById('garden').appendChild(f);
-            setTimeout(() => f.remove(), 6000);
-        }, 500);
     </script>
 </body>
 </html>
