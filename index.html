@@ -2,135 +2,72 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Canım Annem</title>
     <style>
-        body { margin: 0; background: #000; overflow: hidden; height: 100vh; display: flex; justify-content: center; align-items: center; font-family: sans-serif; -webkit-font-smoothing: antialiased; }
+        body { margin: 0; background: #000; overflow: hidden; height: 100vh; display: flex; justify-content: center; align-items: center; font-family: sans-serif; }
         
-        /* 1. Canvas (Tüm Ekran Uyumu - Kesin Çözüm) */
-        #canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
-        
-        /* 2. Kalp (Mobil Uyumlu) */
-        #heart-container { position: relative; width: 220px; height: 220px; z-index: 10; pointer-events: none; }
-        .love-text { position: absolute; color: #ff4d6d; font-size: 9px; white-space: nowrap; text-shadow: 0 0 5px #ff4d6d; }
+        /* Kalp */
+        #heart-container { position: relative; width: 200px; height: 200px; z-index: 10; }
+        .love-text { position: absolute; color: #ff4d6d; font-size: 10px; white-space: nowrap; text-shadow: 0 0 5px #ff4d6d; }
 
-        /* 3. Uçuşan Çiçekler */
-        .u-flower {
-            position: absolute;
-            bottom: -50px;
-            transform-origin: center;
-            animation: growAndFloatMobile 7s linear forwards;
-            z-index: 8;
-            user-select: none;
-            -webkit-user-select: none;
-        }
+        /* Dallı Çiçekler (Sadece 4 tane, sabit) */
+        .branch-flower { position: absolute; bottom: 0; text-align: center; z-index: 5; animation: growUp 4s ease-out forwards; }
+        .branch-line { width: 4px; background: #2d5a27; margin: 0 auto; border-radius: 5px; }
+        @keyframes growUp { 0% { height: 0; opacity: 0; } 100% { height: 150px; opacity: 1; } }
 
-        @keyframes growAndFloatMobile {
+        /* Uçuşan Çiçekler */
+        .float-flower { position: absolute; bottom: -50px; animation: floatUp 6s linear forwards; z-index: 8; }
+        @keyframes floatUp { 
             0% { transform: translateY(0) scale(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; transform: translateY(-10vh) scale(1.3) rotate(45deg); }
-            100% { transform: translateY(-120vh) scale(1.8) rotate(360deg); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translateY(-110vh) scale(1.5) rotate(360deg); opacity: 0; } 
         }
 
-        /* Mesaj */
-        .message {
-            position: absolute;
-            bottom: 10%;
-            color: white;
-            text-align: center;
-            width: 90%;
-            font-size: 1.1rem;
-            text-shadow: 0 0 10px #ff4d6d;
-            z-index: 15;
-            font-weight: bold;
-        }
+        .message { position: absolute; bottom: 8%; color: white; width: 100%; text-align: center; text-shadow: 0 0 10px #ff4d6d; font-weight: bold; z-index: 15; }
     </style>
 </head>
 <body>
-    <canvas id="canvas"></canvas>
     <div id="heart-container"></div>
     <div id="garden"></div>
-    <div class="message">Anneler Günün Kutlu Olsun Canım Annem! 💖🌸🌿</div>
+    <div class="message">Anneler Günün Kutlu Olsun Canım Annem! 💖🌸</div>
 
     <script>
-        // --- 1. Canvas Ayarı (Hem PC Hem Telefon Uyumu) ---
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        function setCanvasSize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        setCanvasSize();
-        window.addEventListener('resize', setCanvasSize); // Ekran boyutu değişirse ayarla
-
-        // --- 2. Dallanıp Büyüyen Çiçekler (Sadece 4 Tane!) ---
-        let mainFlowerCount = 0;
-        function drawBranch(x, y, len, angle, branchWidth) {
-            if (mainFlowerCount >= 4) return; // Sadece 4 dallı çiçek!
-
-            ctx.beginPath();
-            ctx.save();
-            ctx.strokeStyle = "#2d5a27"; // Dal rengi (Koyu Yeşil)
-            ctx.lineWidth = branchWidth;
-            ctx.translate(x, y);
-            ctx.rotate(angle * Math.PI / 180);
-            ctx.moveTo(0, 0);
-            ctx.lineTo(0, -len);
-            ctx.stroke();
-
-            if (len < 10) {
-                // Dalın ucuna gerçek çiçek (Dallı Budaklı)
-                ctx.font = "24px Arial";
-                const flowers = ["🌸", "🌺", "🌷", "🌹"];
-                ctx.fillText(flowers[Math.floor(Math.random() * flowers.length)], -10, -len);
-                ctx.restore();
-                mainFlowerCount++;
-                return;
-            }
-
-            // Dallanma
-            drawBranch(0, -len, len * 0.75, angle + 15, branchWidth * 0.7);
-            drawBranch(0, -len, len * 0.75, angle - 15, branchWidth * 0.7);
-            ctx.restore();
-        }
-
-        // Dallı çiçekleri hemen başlat
-        setTimeout(() => drawBranch(canvas.width * 0.2, canvas.height, 60, 0, 5), 1000);
-        setTimeout(() => drawBranch(canvas.width * 0.4, canvas.height, 50, 0, 5), 2000);
-        setTimeout(() => drawBranch(canvas.width * 0.6, canvas.height, 65, 0, 5), 3000);
-        setTimeout(() => drawBranch(canvas.width * 0.8, canvas.height, 55, 0, 5), 4000);
-
-        // --- 3. Dönen Kalp ---
+        // 1. Kalp
         const container = document.getElementById('heart-container');
-        for (let i = 0; i < 90; i++) {
+        for (let i = 0; i < 80; i++) {
             const span = document.createElement('span');
             span.className = 'love-text';
             span.innerText = "I LOVE YOU ";
             container.appendChild(span);
-            const t = (i / 90) * 2 * Math.PI;
+            const t = (i / 80) * 2 * Math.PI;
             const x = 16 * Math.pow(Math.sin(t), 3);
             const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
-            span.style.left = `${110 + x * 7}px`;
-            span.style.top = `${110 + y * 7}px`;
-            span.animate([
-                { transform: `rotate(${t}rad) translateX(0px)` },
-                { transform: `rotate(${t + 2 * Math.PI}rad) translateX(12px)` }
-            ], { duration: 4500, iterations: Infinity, delay: i * 35 });
+            span.style.left = `${100 + x * 6}px`;
+            span.style.top = `${100 + y * 6}px`;
+            span.animate([{transform:`rotate(${t}rad)`},{transform:`rotate(${t+6.28}rad)`}], {duration:4000, iterations:Infinity});
         }
 
-        // --- 4. Bol Bol Uçuşan Çiçekler ---
-        const garden = document.getElementById('garden');
-        const uFlowers = ["🌸", "🌹", "🌷", "🌺", "🌻", "🌼"];
-        function createUFlower() {
-            const f = document.createElement('div');
-            f.className = 'u-flower';
-            f.innerText = uFlowers[Math.floor(Math.random() * uFlowers.length)];
-            f.style.left = Math.random() * 100 + "vw";
-            f.style.fontSize = (Math.random() * 15 + 20) + "px";
-            f.style.animationDuration = (Math.random() * 3 + 5) + "s";
-            garden.appendChild(f);
-            setTimeout(() => f.remove(), 7000);
+        // 2. Dallı Çiçekler (Dallarıyla beraber 4 adet)
+        const flowers = ["🌸", "🌺", "🌷", "🌹"];
+        for(let i=1; i<=4; i++) {
+            const bf = document.createElement('div');
+            bf.className = 'branch-flower';
+            bf.style.left = (i * 20) + "vw";
+            bf.innerHTML = `<div style="font-size:30px">${flowers[i-1]}</div><div class="branch-line" style="height:120px"></div>`;
+            document.body.appendChild(bf);
         }
-        setInterval(createUFlower, 400); // Uçuşma sıklığı
+
+        // 3. Uçuşan Çiçekler
+        setInterval(() => {
+            const f = document.createElement('div');
+            f.className = 'float-flower';
+            f.innerText = flowers[Math.floor(Math.random()*4)];
+            f.style.left = Math.random()*100 + "vw";
+            f.style.fontSize = (Math.random()*15 + 20) + "px";
+            document.getElementById('garden').appendChild(f);
+            setTimeout(() => f.remove(), 6000);
+        }, 500);
     </script>
 </body>
 </html>
