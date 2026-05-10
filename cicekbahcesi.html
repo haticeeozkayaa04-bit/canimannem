@@ -3,96 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canım Annem İçin ✨</title>
+    <title>Canım Ablam İçin ✨</title>
     <style>
-        body { margin: 0; background: #010a1a; overflow: hidden; height: 100vh; display: flex; justify-content: center; align-items: flex-end; font-family: sans-serif; }
+        body { margin: 0; background: #010a1a; overflow: hidden; height: 100vh; display: flex; justify-content: center; align-items: flex-end; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         
-        /* Gece gökyüzü yıldızları */
-        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle 2s infinite; z-index: 1; }
-        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        /* Hareketli ve Parlayan Yıldızlar */
+        #stars-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        .star { 
+            position: absolute; 
+            background: white; 
+            border-radius: 50%; 
+            opacity: 0.5; 
+            animation: twinkle var(--d) infinite ease-in-out, moveStar var(--m) infinite linear; 
+        }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+        @keyframes moveStar { from { transform: translateY(0); } to { transform: translateY(-20px); } }
 
         /* Çiçek Bahçesi */
-        #garden { position: relative; width: 90%; max-width: 600px; height: 60vh; display: flex; justify-content: space-around; align-items: flex-end; z-index: 5; padding-bottom: 50px; }
+        #garden { 
+            position: relative; 
+            width: 100%; 
+            max-width: 900px; 
+            height: 60vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-end; 
+            z-index: 5; 
+            padding-bottom: 20px;
+            gap: 2px;
+        }
 
-        /* Sapların büyüme animasyonu */
+        /* Çiçek Sapı Büyüme Animasyonu */
         .flower-stem {
             position: relative;
-            width: 5px;
-            background: linear-gradient(to top, #1a3c1a, #2d5a27);
-            border-radius: 5px;
-            animation: growStem 3s ease-out forwards;
+            width: 4px;
+            background: linear-gradient(to top, #0b240b, #2d5a27, #4e9445);
+            border-radius: 10px;
+            transform-origin: bottom;
+            animation: growStem 3.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
             display: flex;
             justify-content: center;
         }
-
-        @keyframes growStem { from { height: 0; } to { height: var(--h); } }
-
-        /* Çiçeklerin açma animasyonu */
-        .flower-head {
-            position: absolute;
-            top: -30px;
-            font-size: 45px;
-            transform: scale(0);
-            animation: bloom 1.5s 2.5s ease-out forwards;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.6));
+        @keyframes growStem { 
+            from { transform: scaleY(0); } 
+            to { transform: scaleY(1); height: var(--h); } 
         }
 
+        /* Çiçek Başlığı (Açma Efekti) */
+        .flower-head {
+            position: absolute;
+            top: -25px;
+            font-size: 35px;
+            transform: scale(0);
+            animation: bloom 1.5s var(--delay) cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.4));
+        }
         @keyframes bloom {
-            0% { transform: scale(0) rotate(-20deg); opacity: 0; }
-            100% { transform: scale(1.3) rotate(0); opacity: 1; }
+            0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+            100% { transform: scale(1.2) rotate(0deg); opacity: 1; }
         }
 
         /* Mesaj */
         .message {
             position: absolute;
             top: 15%;
-            color: white;
-            font-size: 22px;
-            letter-spacing: 2px;
+            color: #fff;
             text-align: center;
             width: 100%;
+            font-size: 26px;
+            font-weight: 300;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
             opacity: 0;
-            animation: fadeIn 2s 4s forwards;
-            text-shadow: 0 0 15px rgba(255,255,255,0.7);
+            animation: fadeIn 3s 5s forwards;
             z-index: 10;
         }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-    <div id="stars"></div>
-    <div class="message">Benim İçin En Özel Çiçek Sensin Annem... ✨</div>
+    <div id="stars-container"></div>
+    <div class="message">Canım Ablam, En Özel Çiçek Sensin! 🌸✨</div>
     <div id="garden"></div>
 
     <script>
-        // Yıldızları oluşturma
-        const starsContainer = document.getElementById('stars');
-        for (let i = 0; i < 120; i++) {
+        // Yıldızları oluştur ve canlandır
+        const starsBox = document.getElementById('stars-container');
+        for (let i = 0; i < 150; i++) {
             const star = document.createElement('div');
             star.className = 'star';
-            star.style.width = star.style.height = Math.random() * 3 + 'px';
+            const size = Math.random() * 3 + 'px';
+            star.style.width = size;
+            star.style.height = size;
             star.style.left = Math.random() * 100 + 'vw';
             star.style.top = Math.random() * 100 + 'vh';
-            star.style.animationDelay = Math.random() * 2 + 's';
-            starsContainer.appendChild(star);
+            star.style.setProperty('--d', (Math.random() * 3 + 2) + 's');
+            star.style.setProperty('--m', (Math.random() * 10 + 10) + 's');
+            starsBox.appendChild(star);
         }
 
-        // Çiçekleri oluşturma
+        // Gür Bahçeyi Oluştur (20 Çiçek!)
         const garden = document.getElementById('garden');
-        const flowers = ["🌸", "🌺", "🌷", "🌹", "🌻"];
-        const heights = ["180px", "220px", "150px", "250px", "190px"];
-
+        const flowers = ["🌸", "🌹", "🌷", "🌺", "🌻", "🌼", "🌿", "🌹", "🌷", "🌸", "🌺", "🌻", "🌼", "🌿", "🌹", "🌷", "🌸", "🌺", "🌻", "🌼"];
+        
         flowers.forEach((f, i) => {
             const stem = document.createElement('div');
             stem.className = 'flower-stem';
-            stem.style.setProperty('--h', heights[i]);
-            stem.style.animationDelay = (i * 0.4) + 's';
+            // Rastgele boylar (120px - 280px arası)
+            const randomHeight = Math.floor(Math.random() * 160) + 120 + "px";
+            stem.style.setProperty('--h', randomHeight);
+            
+            // Çiçeklerin çıkış sırası (Hafif karmaşık ve doğal)
+            const delay = (i * 0.3) + 's';
+            stem.style.animationDelay = delay;
 
             const head = document.createElement('div');
             head.className = 'flower-head';
             head.innerText = f;
-            head.style.animationDelay = (2.2 + (i * 0.4)) + 's';
+            // Sap uzadıktan sonra çiçek açsın (+3 saniye sonra)
+            head.style.setProperty('--delay', (parseFloat(delay) + 2.5) + 's');
 
             stem.appendChild(head);
             garden.appendChild(stem);
