@@ -2,38 +2,44 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Canım Annem</title>
     <style>
         body { margin: 0; background: #000; overflow: hidden; height: 100vh; display: flex; justify-content: center; align-items: center; font-family: sans-serif; }
         
         /* Kalp */
-        #heart-container { position: relative; width: 200px; height: 200px; z-index: 10; }
+        #heart-container { position: relative; width: 200px; height: 200px; z-index: 20; }
         .love-text { position: absolute; color: #ff4d6d; font-size: 10px; white-space: nowrap; text-shadow: 0 0 5px #ff4d6d; }
 
-        /* Dallı Çiçekler (Sadece 4 tane, sabit) */
-        .branch-flower { position: absolute; bottom: 0; text-align: center; z-index: 5; animation: growUp 4s ease-out forwards; }
-        .branch-line { width: 4px; background: #2d5a27; margin: 0 auto; border-radius: 5px; }
-        @keyframes growUp { 0% { height: 0; opacity: 0; } 100% { height: 150px; opacity: 1; } }
+        /* Çiçek Buketi (Tam Ortada ve Altta) */
+        #bouquet-container { position: absolute; bottom: 0; width: 100%; display: flex; justify-content: center; align-items: flex-end; z-index: 10; pointer-events: none; }
+        .branch-flower { position: relative; display: flex; flex-direction: column; align-items: center; margin: 0 -15px; animation: growBouquet 3s ease-out forwards; transform-origin: bottom; }
+        .branch-line { width: 5px; background: linear-gradient(to top, #1a3c1a, #2d5a27); border-radius: 10px; margin-top: -5px; }
+        
+        @keyframes growBouquet {
+            0% { transform: scale(0) rotate(10deg); opacity: 0; }
+            100% { transform: scale(1) rotate(var(--r)); opacity: 1; }
+        }
 
-        /* Uçuşan Çiçekler */
-        .float-flower { position: absolute; bottom: -50px; animation: floatUp 6s linear forwards; z-index: 8; }
+        /* Uçuşan Çiçekler (Tüm Ekranda) */
+        .float-flower { position: absolute; bottom: -50px; animation: floatUp 6s linear forwards; z-index: 15; }
         @keyframes floatUp { 
             0% { transform: translateY(0) scale(0) rotate(0deg); opacity: 0; }
             10% { opacity: 1; }
             100% { transform: translateY(-110vh) scale(1.5) rotate(360deg); opacity: 0; } 
         }
 
-        .message { position: absolute; bottom: 8%; color: white; width: 100%; text-align: center; text-shadow: 0 0 10px #ff4d6d; font-weight: bold; z-index: 15; }
+        .message { position: absolute; bottom: 5%; color: white; width: 100%; text-align: center; text-shadow: 0 0 10px #ff4d6d; font-weight: bold; z-index: 30; font-size: 1.1rem; }
     </style>
 </head>
 <body>
     <div id="heart-container"></div>
+    <div id="bouquet-container"></div>
     <div id="garden"></div>
-    <div class="message">Anneler Günün Kutlu Olsun Canım Annem! 💖🌸</div>
+    <div class="message">Dünyanın En Güzel Annesine... 🌸💖</div>
 
     <script>
-        // 1. Kalp
+        // 1. Kalp Animasyonu
         const container = document.getElementById('heart-container');
         for (let i = 0; i < 80; i++) {
             const span = document.createElement('span');
@@ -48,23 +54,30 @@
             span.animate([{transform:`rotate(${t}rad)`},{transform:`rotate(${t+6.28}rad)`}], {duration:4000, iterations:Infinity});
         }
 
-        // 2. Dallı Çiçekler (Dallarıyla beraber 4 adet)
-        const flowers = ["🌸", "🌺", "🌷", "🌹"];
-        for(let i=1; i<=4; i++) {
+        // 2. Buket Çiçekleri (Merkezi ve Görkemli)
+        const bouquet = document.getElementById('bouquet-container');
+        const flowerTypes = ["🌸", "🌹", "🌷", "🌺", "🌻", "🌼"];
+        const angles = [-20, -10, 0, 10, 20]; // Buket formu için açılar
+
+        angles.forEach((angle, index) => {
             const bf = document.createElement('div');
             bf.className = 'branch-flower';
-            bf.style.left = (i * 20) + "vw";
-            bf.innerHTML = `<div style="font-size:30px">${flowers[i-1]}</div><div class="branch-line" style="height:120px"></div>`;
-            document.body.appendChild(bf);
-        }
+            bf.style.setProperty('--r', angle + 'deg');
+            const h = 120 + (Math.random() * 40); // Rastgele boylar
+            bf.innerHTML = `
+                <div style="font-size:35px; filter: drop-shadow(0 0 10px white);">${flowerTypes[index % flowerTypes.length]}</div>
+                <div class="branch-line" style="height:${h}px"></div>
+            `;
+            bouquet.appendChild(bf);
+        });
 
         // 3. Uçuşan Çiçekler
         setInterval(() => {
             const f = document.createElement('div');
             f.className = 'float-flower';
-            f.innerText = flowers[Math.floor(Math.random()*4)];
-            f.style.left = Math.random()*100 + "vw";
-            f.style.fontSize = (Math.random()*15 + 20) + "px";
+            f.innerText = flowerTypes[Math.floor(Math.random() * flowerTypes.length)];
+            f.style.left = Math.random() * 100 + "vw";
+            f.style.fontSize = (Math.random() * 15 + 20) + "px";
             document.getElementById('garden').appendChild(f);
             setTimeout(() => f.remove(), 6000);
         }, 500);
