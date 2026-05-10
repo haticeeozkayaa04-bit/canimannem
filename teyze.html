@@ -3,27 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canım Teyzemm İçin ✨</title>
+    <title>Canım Annem İçin ✨</title>
     <style>
         body { margin: 0; background: #010a1a; overflow: hidden; height: 100vh; display: flex; justify-content: center; align-items: flex-end; font-family: sans-serif; }
+        
+        /* Yıldızlar */
         #stars { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--d) infinite; }
         @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        
+        /* Uçuşan Kalpler */
         .heart { position: absolute; color: #ff4d6d; font-size: 15px; z-index: 2; animation: float 10s linear infinite; filter: drop-shadow(0 0 5px white); }
         @keyframes float { 0% { transform: translateY(100vh) rotate(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-100px) rotate(360deg); opacity: 0; } }
+        
+        /* Gür Çiçek Bahçesi */
         #garden { position: relative; width: 100%; max-width: 800px; height: 60vh; display: flex; justify-content: center; align-items: flex-end; z-index: 5; gap: 3px; }
         .stem { position: relative; width: 4px; background: linear-gradient(to top, #1a3c1a, #2d5a27); border-radius: 5px; animation: grow 3s ease-out forwards; transform-origin: bottom; }
         @keyframes grow { from { transform: scaleY(0); } to { transform: scaleY(1); height: var(--h); } }
+        
         .flower { position: absolute; top: -30px; font-size: 35px; transform: scale(0); animation: bloom 1s var(--del) forwards; }
         @keyframes bloom { to { transform: scale(1); } }
+        
+        /* Mesaj (Anneye Özel) */
         .message { position: absolute; top: 20%; color: white; width: 100%; text-align: center; font-size: 24px; text-shadow: 0 0 15px white; opacity: 0; animation: fadeIn 2s 5s forwards; z-index: 10; }
         @keyframes fadeIn { to { opacity: 1; } }
     </style>
 </head>
 <body>
     <div id="stars"></div>
-    <div class="message">Anneler Günün Kutlu Olsun Canım Teyzemm... ✨💖</div>
+    <div class="message">Anneler Günün Kutlu Olsun Canım Annem... ✨💖</div>
     <div id="garden"></div>
+
     <script>
         const stars = document.getElementById('stars');
         for (let i = 0; i < 150; i++) {
@@ -35,6 +45,8 @@
             s.style.setProperty('--d', Math.random() * 3 + 2 + 's');
             stars.appendChild(s);
         }
+
+        // Kalp fışkırtma mekanizması
         setInterval(() => {
             const h = document.createElement('div');
             h.className = 'heart';
@@ -43,17 +55,21 @@
             document.body.appendChild(h);
             setTimeout(() => h.remove(), 10000);
         }, 500);
+
         const garden = document.getElementById('garden');
         const fList = ["🌸","🌹","🌷","🌺","🌻","🌼","🌸","🌹","🌷","🌺","🌻","🌼","🌸","🌹","🌷","🌺","🌻","🌼","🌸","🌹"];
+        
         fList.forEach((f, i) => {
             const s = document.createElement('div');
             s.className = 'stem';
             s.style.setProperty('--h', (Math.random() * 150 + 100) + 'px');
             s.style.animationDelay = (i * 0.2) + 's';
+            
             const h = document.createElement('div');
             h.className = 'flower';
             h.innerHTML = f;
             h.style.setProperty('--del', (3 + i * 0.2) + 's');
+            
             s.appendChild(h);
             garden.appendChild(s);
         });
