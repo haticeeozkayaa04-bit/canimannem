@@ -3,43 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canım Ablam İçin ✨</title>
+    <title>Canım Teyzemm İçin ✨</title>
     <style>
         body { margin: 0; background: #010a1a; overflow: hidden; height: 100vh; display: flex; justify-content: center; align-items: flex-end; font-family: 'Segoe UI', serif; }
         
-        /* 1. Yoğun ve Parlayan Yıldızlı Gökyüzü */
-        #sky { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; background: radial-gradient(circle at bottom, #021a3a 0%, #010a1a 100%); }
-        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--d) infinite ease-in-out; }
-        .glow { position: absolute; color: white; animation: twinkle var(--d) infinite; filter: drop-shadow(0 0 5px gold); font-size: 12px; }
-        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+        /* 1. Yoğun ve Hareketli Yıldızlar */
+        #stars-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        .star { 
+            position: absolute; 
+            background: white; 
+            border-radius: 50%; 
+            opacity: 0.5; 
+            animation: twinkle var(--d) infinite ease-in-out, moveStar 15s infinite linear; 
+        }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+        @keyframes moveStar { from { transform: translateY(0); } to { transform: translateY(-30px); } }
 
-        /* 2. Gür ve Yapraklı Çiçek Bahçesi */
-        #garden { position: relative; width: 100%; max-width: 1000px; height: 65vh; display: flex; justify-content: center; align-items: flex-end; z-index: 5; gap: 3px; padding-bottom: 20px; }
+        /* 2. Uçuşan Kalpler (Havada) */
+        #hearts-container { position: absolute; top: 0; left: 0; width: 100%; height: 60vh; z-index: 2; pointer-events: none; }
+        .heart { 
+            position: absolute; 
+            color: #ff3366; 
+            font-size: 14px; 
+            animation: floatHeart var(--h) forwards linear; 
+            filter: drop-shadow(0 0 5px gold);
+        }
+        @keyframes floatHeart { 0% { transform: translateY(100vh) scale(1); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-50px) scale(0.5); opacity: 0; } }
+
+        /* 3. Gür Çiçek Bahçesi */
+        #garden { position: relative; width: 95%; max-width: 900px; height: 65vh; display: flex; justify-content: center; align-items: flex-end; z-index: 5; gap: 4px; padding-bottom: 30px; }
 
         .flower-stem {
             position: relative;
-            width: 5px;
-            background: linear-gradient(to top, #132d13, #2d5a27, #4e9445);
-            border-radius: 10px;
+            width: 4px;
+            background: linear-gradient(to top, #1a3c1a, #2d5a27);
+            border-radius: 5px;
             transform-origin: bottom;
-            animation: growStem 3.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation: growStem 3s ease-out forwards;
             display: flex;
             justify-content: center;
         }
         @keyframes growStem { from { transform: scaleY(0); } to { transform: scaleY(1); height: var(--h); } }
 
-        /* Estetik Yapraklar */
+        /* Yapraklar */
         .leaf {
             position: absolute;
-            width: 18px;
-            height: 12px;
+            width: 15px;
+            height: 10px;
             background: #2d5a27;
             border-radius: 20px 0 20px 0;
             opacity: 0;
             animation: fadeIn 1s var(--ldelay) forwards;
         }
-        .leaf.left { left: -14px; transform: rotate(-35deg); }
-        .leaf.right { right: -14px; transform: rotate(35deg); border-radius: 0 20px 0 20px; }
+        .leaf.left { left: -12px; transform: rotate(-45deg); }
+        .leaf.right { right: -12px; transform: rotate(45deg); border-radius: 0 20px 0 20px; }
 
         .flower-head {
             position: absolute;
@@ -47,76 +64,98 @@
             font-size: 40px;
             transform: scale(0);
             animation: bloom 1.5s var(--delay) cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.6));
         }
-        @keyframes bloom { 0% { transform: scale(0) rotate(-45deg); opacity: 0; } 100% { transform: scale(1.2) rotate(0deg); opacity: 1; } }
+        @keyframes bloom {
+            0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+            100% { transform: scale(1.3) rotate(0); opacity: 1; }
+        }
 
-        /* 3. Merkezi Abla Mesajı */
+        /* Mesaj (Teyzemm) */
         .message {
             position: absolute;
-            top: 18%;
+            top: 15%;
             color: #fff;
             text-align: center;
             width: 100%;
-            font-size: 28px;
+            font-size: 26px;
+            font-weight: 300;
             letter-spacing: 3px;
-            text-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
             opacity: 0;
-            animation: fadeIn 3s 5s forwards;
+            animation: fadeIn 3s 6s forwards;
             z-index: 10;
         }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-    <div id="sky"></div>
-    <div class="message">Dünyanın En Özel Çiçekleri, Ablama... ✨🌸🌿</div>
+    <div id="stars-container"></div>
+    <div id="hearts-container"></div>
+    <div class="message">Anneler Günün Kutlu Olsun Canım Teyzemm... ✨🌿💖</div>
     <div id="garden"></div>
 
     <script>
-        // Yoğun Yıldız ve Parıltı Sistemi
-        const sky = document.getElementById('sky');
-        for (let i = 0; i < 200; i++) {
-            const isGlow = i % 15 === 0;
+        // Yıldızları oluşturma (Yoğun Versiyon)
+        const starsBox = document.getElementById('stars-container');
+        for (let i = 0; i < 180; i++) {
             const star = document.createElement('div');
-            star.className = isGlow ? 'glow' : 'star';
-            if (isGlow) star.innerText = "✨";
-            
-            const size = (Math.random() * 3 + 1) + 'px';
-            star.style.width = isGlow ? 'auto' : size;
-            star.style.height = isGlow ? 'auto' : size;
+            star.className = 'star';
+            const size = Math.random() * 3 + 'px';
+            star.style.width = size;
+            star.style.height = size;
             star.style.left = Math.random() * 100 + 'vw';
-            star.style.top = Math.random() * 80 + 'vh';
+            star.style.top = Math.random() * 100 + 'vh';
             star.style.setProperty('--d', (Math.random() * 3 + 2) + 's');
-            sky.appendChild(star);
+            starsBox.appendChild(star);
         }
 
-        // Çok Daha Gür Çiçek Bahçesi (30 Çiçek!)
+        // Kalpleri oluşturma (Fışkıran)
+        const heartsBox = document.getElementById('hearts-container');
+        setInterval(() => {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerText = i % 2 === 0 ? "💖" : "💕"; // Rastgele kalp tipi
+            heart.style.left = (Math.random() * 80 + 10) + "vw"; // Kenarlara yaklaşmasın
+            heart.style.setProperty('--h', (Math.random() * 5 + 10) + 's'); // Uçuş hızı (10-15sn)
+            heartsBox.appendChild(heart);
+            setTimeout(() => heart.remove(), 15000); // Havaya ulaşınca silinsin
+        }, 300); // 300ms'de bir kalp fışkırsın (Daha Gür!)
+
+        // Gür Çiçek Bahçesi (30 Çiçek!)
         const garden = document.getElementById('garden');
-        const flowers = ["🌸", "🌹", "🌷", "🌺", "🌻", "🌼", "🌸", "🌹", "🌷", "🌺", "🌻", "🌼", "🌸", "🌹", "🌷", "🌺", "🌻", "🌼", "🌸", "🌹", "🌷", "🌺", "🌻", "🌼", "🌸", "🌹", "🌷", "🌺", "🌻", "🌼"];
+        const flowers = ["🌸", "🌹", "🌷", "🌺", "🌻", "🌼", "🌿", "🌸", "🌹", "🌷", "🌺", "🌻", "🌼", "🌿", "🌹", "🌷", "🌸", "🌺", "🌻", "🌼", "🌿", "🌸", "🌷", "🌹", "🌺", "🌻", "🌼", "🌿", "🌹", "🌷"];
         
         flowers.forEach((f, i) => {
             const stem = document.createElement('div');
             stem.className = 'flower-stem';
-            const h = (Math.floor(Math.random() * 150) + 150) + "px";
-            stem.style.setProperty('--h', h);
-            const delay = (i * 0.2) + 's';
+            // Rastgele boylar (120px - 280px arası)
+            const randomHeight = Math.floor(Math.random() * 160) + 120 + "px";
+            stem.style.setProperty('--h', randomHeight);
+            
+            // Çiçeklerin çıkış sırası (Doğal fışkırma)
+            const delay = (i * 0.25) + 's';
             stem.style.animationDelay = delay;
 
             // Yapraklar
-            for (let j = 0; j < 2; j++) {
-                const leaf = document.createElement('div');
-                leaf.className = j === 0 ? 'leaf left' : 'leaf right';
-                leaf.style.top = (40 + j * 20) + "%";
-                leaf.style.setProperty('--ldelay', (parseFloat(delay) + 1 + j * 0.5) + 's');
-                stem.appendChild(leaf);
-            }
+            const l1 = document.createElement('div');
+            l1.className = 'leaf left';
+            l1.style.top = (30 + i % 2 * 10) + "%"; // Yaprak yerleri değişsin
+            l1.style.setProperty('--ldelay', (parseFloat(delay) + 1.2) + 's');
+            
+            const l2 = document.createElement('div');
+            l2.className = 'leaf right';
+            l2.style.top = (50 + i % 2 * 10) + "%";
+            l2.style.setProperty('--ldelay', (parseFloat(delay) + 1.8) + 's');
 
             const head = document.createElement('div');
             head.className = 'flower-head';
             head.innerText = f;
+            // Sap uzadıktan sonra çiçek açsın (+3 saniye sonra)
             head.style.setProperty('--delay', (parseFloat(delay) + 2.8) + 's');
 
+            stem.appendChild(l1);
+            stem.appendChild(l2);
             stem.appendChild(head);
             garden.appendChild(stem);
         });
