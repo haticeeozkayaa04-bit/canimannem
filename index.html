@@ -10,31 +10,26 @@
         #heart-container { position: relative; width: 350px; height: 350px; z-index: 20; mix-blend-mode: screen; filter: drop-shadow(0 0 15px #ff4d6d); }
         .love-text { position: absolute; color: #ff4d6d; font-size: 13px; font-weight: bold; white-space: nowrap; text-shadow: 0 0 5px #ff4d6d; pointer-events: none; }
 
-        /* 2. Gerçek Büyüyen Çiçekler */
+        /* 2. Devasa Büyüyen Emoji Çiçekleri (Kayıpsız ve Kesin Çözüm) */
         #garden { position: absolute; width: 100%; height: 100%; z-index: 10; pointer-events: none; }
-        .growing-flower-img {
+        .growing-flower-emoji {
             position: absolute;
             transform-origin: bottom center;
             opacity: 0;
-            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.8));
-            animation: flowerGrow 8s ease-out forwards;
+            filter: drop-shadow(0 5px 15px rgba(255,255,255,0.3));
+            animation: flowerGrowEmoji 7s ease-out forwards;
         }
 
-        /* Çiçeklerin Farklı Boyut ve Konumları (Büyüme Animasyonu) */
-        @keyframes flowerGrow {
+        /* Çiçeklerin Devasa Büyüme Animasyonu */
+        @keyframes flowerGrowEmoji {
             0% { transform: scale(0) rotate(0deg); opacity: 0; }
-            15% { opacity: 1; }
-            50% { transform: scale(1.2) rotate(15deg); opacity: 1; }
-            100% { transform: scale(1) rotate(0deg) translateY(-85vh); opacity: 0; }
+            10% { opacity: 1; }
+            40% { transform: scale(3) rotate(10deg); opacity: 1; } /* 3 kat devasa büyüme */
+            100% { transform: scale(2.5) rotate(0deg) translateY(-90vh); opacity: 0; } /* Yükselirken küçülerek kaybolma */
         }
-
-        /* 3. Yıldızlar/Parıltılar */
-        .sparkle { position: absolute; background: white; border-radius: 50%; animation: twinkle 3s infinite alternate; z-index: 5; }
-        @keyframes twinkle { from { opacity: 0.1; } to { opacity: 1; } }
 
         /* Mesaj */
-        .message { position: absolute; bottom: 8%; color: #fff; text-align: center; width: 100%; text-shadow: 0 0 15px #ff4d6d; z-index: 30; font-size: 30px; font-weight: bold; letter-spacing: 2px; animation: textGlow 2s infinite alternate; }
-        @keyframes textGlow { from { text-shadow: 0 0 10px #ff4d6d; } to { text-shadow: 0 0 25px #ff4d6d, 0 0 10px #fff; } }
+        .message { position: absolute; bottom: 8%; color: #fff; text-align: center; width: 100%; text-shadow: 0 0 15px #ff4d6d; z-index: 30; font-size: 30px; font-weight: bold; letter-spacing: 2px; }
     </style>
 </head>
 <body>
@@ -47,7 +42,7 @@
         const garden = document.getElementById('garden');
         const words = "I LOVE YOU ";
 
-        // 1. Dönen Yazılı Kalp (Hafifçe Büyüyen ve Asılı)
+        // 1. Dönen Yazılı Kalp (Asılı Kalmaya Devam)
         for (let i = 0; i < 150; i++) {
             const span = document.createElement('span');
             span.className = 'love-text';
@@ -64,48 +59,27 @@
             ], { duration: 4000, iterations: Infinity, delay: i * 25 });
         }
 
-        // 2. GERÇEK, BÜYÜYEN ÇİÇEKLER (VİDEODAKİ GİBİ)
-        // Çiçek resimlerinin URL'leri (Gül, Papatya, Orkide vb.)
-        const flowerImages = [
-            "https://i.imgur.com/8Q8j9Gj.png", // Pembe Gül 1
-            "https://i.imgur.com/w1O2nS9.png", // Beyaz Papatya 1
-            "https://i.imgur.com/M6L2M5t.png", // Pembe Gül 2
-            "https://i.imgur.com/GzL68vT.png", // Mor Orkide
-            "https://i.imgur.com/Fw5jA6F.png", // Sarı Papatya
-            "https://i.imgur.com/6J7r2V7.png"  // Kırmızı Gül
-        ];
+        // 2. BOL BOL, DEVASA BÜYÜYEN EMOJİ ÇİÇEKLERİ
+        const flowers = ["🌸", "🌹", "🌷", "🌺", "🌻", "🌼", "💐", "🦋"];
 
-        function plantFlower() {
-            const flower = document.createElement('img');
-            flower.className = 'growing-flower-img';
-            // Rastgele bir çiçek resmi seç
-            flower.src = flowerImages[Math.floor(Math.random() * flowerImages.length)];
+        function plantFlowerEmoji() {
+            const flower = document.createElement('div');
+            flower.className = 'growing-flower-emoji';
+            flower.innerText = flowers[Math.floor(Math.random() * flowers.length)];
             // Ekranın altından rastgele bir yatay konum
             flower.style.left = (Math.random() * 110 - 5) + "vw";
-            // Rastgele büyüme hızı ve boyutu
-            const size = (Math.random() * 100 + 100) + "px"; // 100px - 200px arası
-            flower.style.width = size;
-            flower.style.height = "auto";
-            flower.style.animationDuration = (Math.random() * 4 + 6) + "s"; // 6s - 10s arası
+            // Başlangıç boyutu (animasyonla 3 katına çıkacak)
+            const baseSize = (Math.random() * 20 + 30) + "px"; // 30px - 50px arası
+            flower.style.fontSize = baseSize;
+            flower.style.animationDuration = (Math.random() * 3 + 5) + "s"; // 5s - 8s arası
             
             garden.appendChild(flower);
             // Animasyon bittikten sonra çiçeği sil
-            setTimeout(() => flower.remove(), 10000);
+            setTimeout(() => flower.remove(), 8000);
         }
 
-        // Çok Daha Fazla Çiçek: Her 250 milisaniyede bir çiçek fırlat
-        setInterval(plantFlower, 250);
-
-        // 3. Arka Plan Parıltıları
-        for (let i = 0; i < 70; i++) {
-            const sparkle = document.createElement('div');
-            sparkle.className = 'sparkle';
-            sparkle.style.width = sparkle.style.height = (Math.random() * 4 + 1) + "px";
-            sparkle.style.left = Math.random() * 100 + "vw";
-            sparkle.style.top = Math.random() * 100 + "vh";
-            sparkle.style.animationDelay = Math.random() * 3 + "s";
-            document.body.appendChild(sparkle);
-        }
+        // Çok Daha Fazla Çiçek: Her 200 milisaniyede bir çiçek fırlat
+        setInterval(plantFlowerEmoji, 200);
     </script>
 </body>
 </html>
